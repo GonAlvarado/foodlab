@@ -1,11 +1,15 @@
 package com.foodlab.modelo;
 
+import com.foodlab.excepciones.StockInsuficienteException;
+import com.foodlab.servicios.ProductoService;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Pedido {
     private static int contadorPedidos = 0;
+    private ProductoService prods;
 
     private final int id;
     private final Map<Integer, Integer> carrito;
@@ -16,8 +20,11 @@ public class Pedido {
         this.carrito = new HashMap<>();
     }
 
-    public void agregarAlCarrito(int idProducto, int cantidad) {
-        if (carrito.containsKey(idProducto)) {
+    public void agregarAlCarrito(int idProducto, int cantidad) throws StockInsuficienteException {
+        int stock = ProductoService.stockById(idProducto);
+        if (cantidad > stock){
+            throw new StockInsuficienteException("❌ No hay stock suficiente. Stock disponible: " + stock);
+        } if (carrito.containsKey(idProducto)) {
             carrito.put(idProducto, carrito.get(idProducto) + cantidad);
         } else {
             carrito.put(idProducto, cantidad);

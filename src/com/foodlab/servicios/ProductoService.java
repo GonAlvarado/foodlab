@@ -166,7 +166,7 @@ public class ProductoService {
         }
     }
 
-    public int stockById(int id){
+    public static int stockById(int id){
         int stock = -1;
         for (Producto p: productos){
             if (id == p.getId()){

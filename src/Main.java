@@ -1,4 +1,3 @@
-import com.foodlab.excepciones.StockInsuficienteException;
 import com.foodlab.servicios.PedidoService;
 import com.foodlab.servicios.ProductoService;
 
@@ -8,11 +7,11 @@ public class Main {
     private static final ProductoService prods = new ProductoService();
     private static final PedidoService peds = new PedidoService(prods);
 
-    public static void main(String[] args) throws StockInsuficienteException {
+    public static void main(String[] args) {
         mostrarMenu();
     }
 
-    private static void mostrarMenu() throws StockInsuficienteException {
+    private static void mostrarMenu() {
         int opcion = 0;
         Scanner scanner = new Scanner(System.in);
 

@@ -15,7 +15,7 @@ public class PedidoService {
         this.prods = prods;
     }
 
-    public void crearPedido() throws StockInsuficienteException {
+    public void crearPedido() {
         Pedido pedido = new Pedido();
 
         boolean continuar = true;
@@ -35,25 +35,24 @@ public class PedidoService {
         System.out.println("✅ Pedido creado con éxito.");
     }
 
-    private void agregarProductoAlCarrito(Pedido pedido) throws StockInsuficienteException {
+    private void agregarProductoAlCarrito(Pedido pedido) {
         prods.listarProductos();
         System.out.println("Ingrese el ID del producto que desea agregar al carrito:");
         int idProducto = pedirEntero();
         System.out.println("Ingrese la cantidad que desea adquirir:");
         int cantidad = pedirEntero();
-        int stock = prods.stockById(idProducto);
+        int stock = ProductoService.stockById(idProducto);
 
         if (stock == -1) {
             System.out.println("⚠️ No se encontró un producto con ese ID.");
             return;
         }
 
-        if (cantidad > stock) {
-            System.out.println();
-            throw new StockInsuficienteException("❌ No hay stock suficiente. Stock disponible: " + stock);
-        } else {
+        try {
             pedido.agregarAlCarrito(idProducto, cantidad);
             System.out.println("✅ Producto agregado al carrito.");
+        } catch (StockInsuficienteException e) {
+            System.out.println("Error: " + e);
         }
     }
 
