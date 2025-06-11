@@ -1,5 +1,7 @@
 package com.foodlab.servicios;
 
+import com.foodlab.modelo.Bebida;
+import com.foodlab.modelo.Comida;
 import com.foodlab.modelo.Producto;
 
 import java.util.ArrayList;
@@ -16,15 +18,29 @@ public class ProductoService {
 
     private void inicializarCatalogo() {
         productos.addAll(Arrays.asList(
-                new Producto("Hamburguesa completa", 6000, 120),
-                new Producto("Cono de papas fritas", 2000, 600),
-                new Producto("Ensalada Caesar", 3000, 50),
-                new Producto("Cono de aros de cebolla", 2500, 50),
-                new Producto("Wrap de verduras", 4000, 100)
+                new Comida("Hamburguesa completa", 6000, 120, "16/06/25"),
+                new Bebida("Agua saborizada", 1000, 100, 1.5),
+                new Bebida("Gaseosa", 1500, 120, 1.5),
+                new Comida("Cono de papas fritas", 2000, 600, "16/06/25"),
+                new Comida("Ensalada Caesar", 3000, 50, "16/06/25"),
+                new Comida("Cono de aros de cebolla", 2500, 50, "16/06/25"),
+                new Comida("Wrap de verduras", 4000, 100, "16/06/25")
         ));
     }
 
     public void agregarProducto(){
+        System.out.println("""
+                ¿Qué tipo de producto desea agregar?
+                1 - Comida
+                2 - Bebida
+                """);
+        String tipo = scanner.nextLine().trim();
+
+        if (!tipo.equals("1") && !tipo.equals("2")) {
+            System.out.println("❌ Tipo de producto inválido. Operación cancelada.");
+            return;
+        }
+
         System.out.println("Ingrese el nombre del producto:");
         String nombre = scanner.nextLine().trim();
 
@@ -60,8 +76,30 @@ public class ProductoService {
             }
         }
 
-        productos.add(new Producto(nombre, precio, stock));
-        System.out.println("✅ Producto agregado con éxito.");
+        if (tipo.equals("1")) {
+            System.out.println("Ingrese la fecha de vencimiento: ");
+            String fecha = scanner.nextLine().trim();
+            productos.add(new Comida(nombre, precio, stock, fecha));
+            System.out.println("✅ Comida agregada con éxito.");
+        } else {
+            double litros;
+            while (true) {
+                System.out.println("Ingrese los litros de la bebida:");
+                String input = scanner.nextLine().trim();
+                try {
+                    litros = Double.parseDouble(input);
+                    if (litros <= 0) {
+                        System.out.println("⚠️ Los litros deben ser mayores a cero.");
+                    } else {
+                        break;
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("⚠️ Entrada inválida. Ingrese un número decimal válido.");
+                }
+            }
+            productos.add(new Bebida(nombre, precio, stock, litros));
+            System.out.println("✅ Bebida agregada con éxito.");
+        }
     }
 
     public void listarProductos(){
